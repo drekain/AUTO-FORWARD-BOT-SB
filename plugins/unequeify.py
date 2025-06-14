@@ -1,6 +1,6 @@
 import re, asyncio
 from database import Db, db
-from config import *
+from config import Config, temp
 from .test import CLIENT, get_client
 from script import Script
 import base64
