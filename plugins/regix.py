@@ -20,6 +20,9 @@ CLIENT = CLIENT()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 TEXT = Script.TEXT
+MAX_BATCH_SIZE = 100  # Max messages per batch
+BATCH_SLEEP = 0.2     # Reduced sleep between batches
+COPY_SLEEP = 0.05     # Reduced sleep for individual copies
 
 @Client.on_callback_query(filters.regex(r'^start_public'))
 async def pub_(bot, message):
@@ -90,9 +93,8 @@ async def pub_(bot, message):
             user_have_db = True
     temp.forwardings += 1
     await db.add_frwd(user)
-    await send(client, user, "<b>Fᴏʀᴡᴀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ 🌼</b>")
+    await send(client, user, "<b>Fᴏʀᴡᴀʀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ 🌼</b>")
     sts.add(time=True)
-    sleep = 1 if _bot['is_bot'] else 10
     await msg_edit(m, "<code>processing...</code>") 
     temp.IS_FRWD_CHAT.append(i.TO)
     temp.lock[user] = locked = True
@@ -139,20 +141,23 @@ async def pub_(bot, message):
                         await user_db.add_file(message.document.file_id)
                 if forward_tag:
                    MSG.append(message.id)
-                   notcompleted = len(MSG)
-                   completed = sts.get('total') - sts.get('fetched')
-                   if ( notcompleted >= 100 
-                        or completed <= 100): 
+                   if len(MSG) >= MAX_BATCH_SIZE: 
                       await forward(user, client, MSG, m, sts, protect)
-                      sts.add('total_files', notcompleted)
-                      await asyncio.sleep(10)
+                      sts.add('total_files', len(MSG))
+                      await asyncio.sleep(BATCH_SLEEP)
                       MSG = []
                 else:
                    new_caption = custom_caption(message, caption)
                    details = {"msg_id": message.id, "media": media(message), "caption": new_caption, 'button': button, "protect": protect}
-                   await copy(user, client, details, m, sts)
+                   # Process copies concurrently
+                   asyncio.create_task(copy(user, client, details, m, sts))
                    sts.add('total_files')
-                   await asyncio.sleep(sleep) 
+                   await asyncio.sleep(COPY_SLEEP)
+          
+          # Process remaining messages in batch
+          if forward_tag and MSG:
+              await forward(user, client, MSG, m, sts, protect)
+              sts.add('total_files', len(MSG))
         except Exception as e:
             await msg_edit(m, f'<b>ERROR:</b>\n<code>{e}</code>', wait=True)
             print(e)
@@ -162,7 +167,7 @@ async def pub_(bot, message):
             temp.IS_FRWD_CHAT.remove(sts.TO)
             return await stop(client, user)
         temp.IS_FRWD_CHAT.remove(sts.TO)
-        await send(client, user, "<b>🎉 ғᴏʀᴡᴀᴅɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</b>")
+        await send(client, user, "<b>🎉 ғᴏʀᴡᴀʀᴅɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</b>")
         await edit(user, m, 'ᴄᴏᴍᴘʟᴇᴛᴇᴅ', "completed", sts) 
         if user_have_db:
             await user_db.drop_all()
