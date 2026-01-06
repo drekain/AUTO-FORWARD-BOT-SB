@@ -43,7 +43,7 @@ async def run(bot, message):
         await message.reply(Script.CANCEL)
         return 
     if fromid.text and not fromid.forward_date:
-        regex = re.compile("(https://)?(t\.me/|telegram\.me/|telegram\.dog/)(c/)?(\d+|[a-zA-Z_0-9]+)/(\d+)$")
+        regex = re.compile(r"(https://)?(t\.me/|telegram\.me/|telegram\.dog/)(c/)?(\d+|[a-zA-Z_0-9]+)/(\d+)$")
         match = regex.match(fromid.text.replace("?single", ""))
         if not match:
             return await message.reply('Invalid link')
@@ -85,3 +85,10 @@ async def run(bot, message):
         reply_markup=reply_markup
     )
     STS(forward_id).store(chat_id, toid, int(skipno.text), int(last_msg_id))
+
+
+# ====================================================================
+# 🚀 Repo updated by t.me/SteveBotz | Support: t.me/SteveBotzSupport
+# ⚠️ Do NOT Remove Credit, stealing credit doesn't make you developer.
+# ❌ Selling this repository or any part of it is STRICTLY PROHIBITED. 
+# =====================================================================
