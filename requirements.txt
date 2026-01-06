@@ -1,9 +1,8 @@
-pyrofork==2.3.43
+pyrofork==2.3.68
 tgcrypto
 pyropatch
 humanize
 motor
-TgCrypto
 Dnspython
 pymongo
 umongo
