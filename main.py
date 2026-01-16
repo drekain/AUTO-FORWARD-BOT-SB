@@ -1,13 +1,13 @@
 import asyncio, logging
 from config import Config
-from pyrogram import Client as VJ, idle
+from pyrogram import Client as SB, idle
 from typing import Union, Optional, AsyncGenerator
 from logging.handlers import RotatingFileHandler
 from plugins.regix import restart_forwards
 
 if __name__ == "__main__":
-    VJBot = VJ(
-        "VJ-Forward-Bot",
+    SteveBotz = SB(
+        "Steve-Forward-Bot",
         bot_token=Config.BOT_TOKEN,
         api_id=Config.API_ID,
         api_hash=Config.API_HASH,
@@ -54,10 +54,11 @@ if __name__ == "__main__":
                 current += 1
                
     async def main():
-        await VJBot.start()
-        bot_info  = await VJBot.get_me()
-        await restart_forwards(VJBot)
+        await SteveBotz.start()
+        bot_info  = await SteveBotz.get_me()
+        await restart_forwards(SteveBotz)
         print("Bot Started.")
         await idle()
 
     asyncio.get_event_loop().run_until_complete(main())
+
