@@ -13,7 +13,7 @@ from os import environ, execle, system
 START_TIME = time.time()
 
 main_buttons = [[
-    InlineKeyboardButton('🌥 Uᴘᴅᴀᴛᴇ 🌥', url='https://t.me/SteveBotz'),
+    InlineKeyboardButton('🌥 Uᴘᴅᴀᴛᴇ 🌥', url='https://t.me/0000'),
     InlineKeyboardButton('🍁 Sᴜᴘᴘᴏʀᴛ 🍁', url='https://t.me/steveBotzSupport')
 ],[
     InlineKeyboardButton('Hᴇʟᴘ 🌺', callback_data='help'),
