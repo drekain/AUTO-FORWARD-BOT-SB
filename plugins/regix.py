@@ -385,7 +385,7 @@ async def stop_forward(client, message):
     temp.CANCEL[user_id] = True
     mst = await db.get_forward_details(user_id)
     msg = await client.get_messages(user_id, mst['msg_id'])
-    link = f"tg://openmessage?user_id={6648261085}&message_id={mst['msg_id']}"
+    link = f"tg://openmessage?user_id={8373121824}&message_id={mst['msg_id']}"
     await sts.edit(f"<b>Successfully Canceled </b>", disable_web_page_preview=True)
 
 async def restart_pending_forwads(bot, user):
